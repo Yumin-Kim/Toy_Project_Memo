@@ -49,7 +49,10 @@ const config: Configuration = {
             "@babel/preset-react",
             "@babel/preset-typescript",
           ],
-          plugins: ["@babel/plugin-proposal-class-properties"],
+          plugins: [
+            "@babel/plugin-proposal-class-properties",
+            "@babel/plugin-transform-runtime",
+          ],
           env: {
             development: {
               plugins: [require.resolve("react-refresh/babel")],
@@ -83,7 +86,7 @@ const config: Configuration = {
   },
   devServer: {
     historyApiFallback: true, // react router
-    port: 3000,
+    port: 5000,
     publicPath: "/dist/",
     hot: true,
     // proxy: {
