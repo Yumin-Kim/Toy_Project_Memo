@@ -1,3 +1,18 @@
+import { EntityAction } from "@typings/reduxType/action";
+import {
+  getAllPostingAction,
+  getDetailSubTopicInfoAction,
+  getDetailTopicInfoAction,
+  getSubTopicInfoAction,
+  getTopicListSiderBarAction,
+  getTopicPostingInfoAction,
+  resetWriteSubTopicAction,
+  resetWriteTopicAction,
+  writePostingInfoAction,
+  writeSubTopicInfoAction,
+  writeTopicInfoAction,
+} from ".";
+
 export const GET_TOPICLIST_SIDEBAR = {
   REQUEST: "REQUEST_GET_TOPICLIST_SIDEBAR",
   SUCCESS: "SUCCESS_GET_TOPICLIST_SIDEBAR",
@@ -33,10 +48,10 @@ export const GET_ALL_POSTING = {
   SUCCESS: "SUCCESS_GET_ALL_POSTING",
   FAILURE: "FAILURE_GET_ALL_POSTING",
 } as const;
-export const WRIRTE_POSTING = {
-  REQUEST: "REQUEST_WRIRTE_POSTING",
-  SUCCESS: "SUCCESS_WRIRTE_POSTING",
-  FAILURE: "FAILURE_WRIRTE_POSTING",
+export const WRITE_POSTING = {
+  REQUEST: "REQUEST_WRITE_POSTING",
+  SUCCESS: "SUCCESS_WRITE_POSTING",
+  FAILURE: "FAILURE_WRITE_POSTING",
 } as const;
 
 export const WRITE_TOPIC = {
@@ -50,3 +65,47 @@ export const WRITE_SUBTOPIC = {
   SUCCESS: "SUCCESS_WRITE_SUBTOPIC",
   FAILURE: "FAILURE_WRITE_SUBTOPIC",
 } as const;
+
+export const RESET_WRITE_TOPIC = "RESET_WRITE_TOPIC" as const;
+export const RESET_WRITE_SUBTOPIC = "RESET_WRITE_SUBTOPIC" as const;
+
+export type T_GetTopicListSiderBarAction = EntityAction<
+  typeof getTopicListSiderBarAction
+>;
+export type T_GetAllPostingAction = EntityAction<typeof getAllPostingAction>;
+export type T_GetTopicPostingAction = EntityAction<
+  typeof getTopicPostingInfoAction
+>;
+export type T_GetDetailTopicPostingAction = EntityAction<
+  typeof getDetailTopicInfoAction
+>;
+export type T_GetDetailSubTopicPostingAction = EntityAction<
+  typeof getDetailSubTopicInfoAction
+>;
+export type T_GetSubTopicPostingAction = EntityAction<
+  typeof getSubTopicInfoAction
+>;
+export type T_WritePostingIngoAction = EntityAction<
+  typeof writePostingInfoAction
+>;
+export type T_WriteTopicIngoAction = EntityAction<typeof writeTopicInfoAction>;
+export type T_WriteSubTopicIngoAction = EntityAction<
+  typeof writeSubTopicInfoAction
+>;
+export type T_resetWriteTopicAction = ReturnType<typeof resetWriteTopicAction>;
+export type T_resetWriteSubTopicAction = ReturnType<
+  typeof resetWriteSubTopicAction
+>;
+
+export type POST_RETURN_ACTIONS =
+  | T_GetAllPostingAction
+  | T_GetTopicListSiderBarAction
+  | T_GetTopicPostingAction
+  | T_GetSubTopicPostingAction
+  | T_GetDetailSubTopicPostingAction
+  | T_GetDetailTopicPostingAction
+  | T_WritePostingIngoAction
+  | T_WriteTopicIngoAction
+  | T_resetWriteTopicAction
+  | T_resetWriteSubTopicAction
+  | T_WriteSubTopicIngoAction;

@@ -1,13 +1,26 @@
 import {
   getTopicListSiderBarAction,
-  T_GetTopicListSiderBarAction,
   getAllPostingAction,
-  T_GetAllPostingAction,
-  T_GetTopicPostingAction,
-  getTopicPostingInfoAPI,
+  writePostingInfoAction,
+  writeTopicInfoAction,
+  writeSubTopicInfoAction,
+  getSubTopicInfoAction,
+  getDetailTopicInfoAction,
+  getDetailSubTopicInfoAction,
 } from "@actions/post";
+import {
+  T_GetAllPostingAction,
+  T_GetDetailSubTopicPostingAction,
+  T_GetDetailTopicPostingAction,
+  T_GetSubTopicPostingAction,
+  T_GetTopicListSiderBarAction,
+  T_GetTopicPostingAction,
+  T_WritePostingIngoAction,
+  T_WriteSubTopicIngoAction,
+  T_WriteTopicIngoAction,
+} from "@actions/post/type";
 import { all, call, fork, put, takeLatest } from "redux-saga/effects";
-import { getTopicPostingInfoAction } from "../actions/post/index";
+import { getTopicPostingInfoAction } from "@actions/post/index";
 
 function* getsiderBarCategorySagaFunc(action: T_GetTopicListSiderBarAction) {
   try {
@@ -49,10 +62,10 @@ function* getTopicPostingSagaFunc(action: T_GetTopicPostingAction) {
         getTopicPostingInfoAction.API,
         action.payload
       );
-      yield put(getAllPostingAction.ACTION.SUCCESS(data));
+      yield put(getTopicPostingInfoAction.ACTION.SUCCESS(data));
     }
   } catch (error) {
-    yield put(getAllPostingAction.ACTION.FAILURE(error));
+    yield put(getTopicPostingInfoAction.ACTION.FAILURE(error));
   }
 }
 
@@ -62,11 +75,120 @@ function* watchGetTopicPosting() {
     getTopicPostingSagaFunc
   );
 }
+function* writePostingSagaFunc(action: T_WritePostingIngoAction) {
+  try {
+    if (action.type === "REQUEST_WRITE_POSTING") {
+      const { data } = yield call(writePostingInfoAction.API, action.payload);
+      yield put(writePostingInfoAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(writePostingInfoAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchWritePosting() {
+  yield takeLatest(writePostingInfoAction.ACTION.REQUEST, writePostingSagaFunc);
+}
+
+function* writeTopicSagaFunc(action: T_WriteTopicIngoAction) {
+  try {
+    if (action.type === "REQUEST_WRITE_TOPIC") {
+      const { data } = yield call(writeTopicInfoAction.API, action.payload);
+      yield put(writeTopicInfoAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(writeTopicInfoAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchWriteTopic() {
+  yield takeLatest(writeTopicInfoAction.ACTION.REQUEST, writeTopicSagaFunc);
+}
+
+function* writeSubTopicSagaFunc(action: T_WriteSubTopicIngoAction) {
+  try {
+    if (action.type === "REQUEST_WRITE_SUBTOPIC") {
+      const { data } = yield call(writeSubTopicInfoAction.API, action.payload);
+      yield put(writeSubTopicInfoAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(writeSubTopicInfoAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchWriteSubTopic() {
+  yield takeLatest(
+    writeSubTopicInfoAction.ACTION.REQUEST,
+    writeSubTopicSagaFunc
+  );
+}
+function* GetSubTopicPostingSagaFunc(action: T_GetSubTopicPostingAction) {
+  try {
+    if (action.type === "REQUEST_GET_SUBTOPIC_POSTING") {
+      const { data } = yield call(getSubTopicInfoAction.API, action.payload);
+      yield put(getSubTopicInfoAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(getSubTopicInfoAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchGetSubTopicPosting() {
+  yield takeLatest(
+    getSubTopicInfoAction.ACTION.REQUEST,
+    GetSubTopicPostingSagaFunc
+  );
+}
+function* detailTopicPostingSagaFunc(action: T_GetDetailTopicPostingAction) {
+  try {
+    if (action.type === "REQUEST_GET_DETAIL_TOPICPOSTING") {
+      const { data } = yield call(getDetailTopicInfoAction.API, action.payload);
+      yield put(getDetailTopicInfoAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(getDetailTopicInfoAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchDetailTopicPosting() {
+  yield takeLatest(
+    getDetailTopicInfoAction.ACTION.REQUEST,
+    detailTopicPostingSagaFunc
+  );
+}
+function* detailSubTopicPostingSagaFunc(
+  action: T_GetDetailSubTopicPostingAction
+) {
+  try {
+    if (action.type === "REQUEST_GET_DETAIL_SUBTOPICPOSTING") {
+      const { data } = yield call(
+        getDetailSubTopicInfoAction.API,
+        action.payload
+      );
+      yield put(getDetailSubTopicInfoAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(getDetailSubTopicInfoAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchDetailSubTopicPosting() {
+  yield takeLatest(
+    getDetailSubTopicInfoAction.ACTION.REQUEST,
+    detailSubTopicPostingSagaFunc
+  );
+}
 
 export default function* postSaga() {
   yield all([
     fork(watchGetSideBarCategory),
     fork(watchGetAllPosting),
     fork(watchGetTopicPosting),
+    fork(watchDetailSubTopicPosting),
+    fork(watchDetailTopicPosting),
+    fork(watchGetSubTopicPosting),
+    fork(watchWriteSubTopic),
+    fork(watchWriteTopic),
+    fork(watchWritePosting),
   ]);
 }

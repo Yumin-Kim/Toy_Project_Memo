@@ -1,15 +1,26 @@
+import {
+  DTOCategoryWrite,
+  DTOPostingWrite,
+  DTOSubCategoryWrite,
+} from "@typings/DTO";
 import { ReturnPostingBoard, TopicListSiderBarInfo } from "@typings/Entity";
 import {
   createActionAxiosGetVerion,
   createActionAxiosGetVerionToAPIPARMA,
-  createActionFactory,
-  EntityAction,
 } from "@typings/reduxType/action";
 import axios from "axios";
 import {
   GET_ALL_POSTING,
+  GET_DETAIL_SUBTOPICPOSTING,
+  GET_DETAIL_TOPICPOSTING,
+  GET_SUBTOPIC_POSTING,
   GET_TOPICLIST_SIDEBAR,
   GET_TOPIC_POSTING,
+  RESET_WRITE_TOPIC,
+  WRITE_POSTING,
+  WRITE_SUBTOPIC,
+  WRITE_TOPIC,
+  RESET_WRITE_SUBTOPIC,
 } from "./type";
 
 axios.defaults.baseURL = "http://localhost:3000/api";
@@ -46,6 +57,23 @@ export const getAllPostingAction = createActionAxiosGetVerionToAPIPARMA(
 );
 
 /////////////////////////
+/////////////////////////
+export const getSubTopicPostingInfoAPI = async ({
+  topic,
+  subTopic,
+}: {
+  topic: string;
+  subTopic: string;
+}): Promise<ReturnPostingBoard[]> => {
+  return await axios.get(`/category/info/${topic}/${subTopic}`);
+};
+
+export const getSubTopicInfoAction = createActionAxiosGetVerionToAPIPARMA(
+  GET_SUBTOPIC_POSTING,
+  getSubTopicPostingInfoAPI
+);
+/////////////////////////
+
 export const getTopicPostingInfoAPI = async ({
   offset,
   topic,
@@ -61,15 +89,81 @@ export const getTopicPostingInfoAction = createActionAxiosGetVerionToAPIPARMA(
   getTopicPostingInfoAPI
 );
 /////////////////////////
+/////////////////////////
+export const getDetailTopicPostingInfoAPI = async ({
+  topic,
+  topicId,
+}: {
+  topic: string;
+  topicId: number;
+}): Promise<ReturnPostingBoard> => {
+  return await axios.get(`/category/info/${topic}/detail/${topicId}`);
+};
 
-export type T_GetTopicListSiderBarAction = EntityAction<
-  typeof getTopicListSiderBarAction
->;
-export type T_GetAllPostingAction = EntityAction<typeof getAllPostingAction>;
-export type T_GetTopicPostingAction = EntityAction<
-  typeof getTopicPostingInfoAction
->;
-export type POST_RETURN_ACTIONS =
-  | T_GetAllPostingAction
-  | T_GetTopicListSiderBarAction
-  | T_GetTopicPostingAction;
+export const getDetailTopicInfoAction = createActionAxiosGetVerionToAPIPARMA(
+  GET_DETAIL_TOPICPOSTING,
+  getDetailTopicPostingInfoAPI
+);
+/////////////////////////
+/////////////////////////
+export const getDetailSubTopicPostingInfoAPI = async ({
+  topic,
+  subTopic,
+  topicId,
+}: {
+  topic: string;
+  subTopic: string;
+  topicId: number;
+}): Promise<ReturnPostingBoard> => {
+  return await axios.get(
+    `/category/info/${topic}/detail/${subTopic}/${topicId}`
+  );
+};
+
+export const getDetailSubTopicInfoAction = createActionAxiosGetVerionToAPIPARMA(
+  GET_DETAIL_SUBTOPICPOSTING,
+  getDetailSubTopicPostingInfoAPI
+);
+/////////////////////////
+/////////////////////////
+export const writePostingInfoAPI = async (
+  dtoPostingWrite: DTOPostingWrite
+): Promise<{ operation: string }> => {
+  return await axios.post(`/category/write`, dtoPostingWrite);
+};
+
+export const writePostingInfoAction = createActionAxiosGetVerionToAPIPARMA(
+  WRITE_POSTING,
+  writePostingInfoAPI
+);
+/////////////////////////
+/////////////////////////
+export const writeTopicInfoAPI = async (
+  dtoCategorywrite: DTOCategoryWrite
+): Promise<{ operation: string }> => {
+  return await axios.post(`/category/write/category`, dtoCategorywrite);
+};
+
+export const writeTopicInfoAction = createActionAxiosGetVerionToAPIPARMA(
+  WRITE_TOPIC,
+  writeTopicInfoAPI
+);
+/////////////////////////
+/////////////////////////
+export const writeSubTopicInfoAPI = async (
+  dtoSubCategorywrite: DTOSubCategoryWrite
+): Promise<{ operation: string }> => {
+  return await axios.post(`/category/write/subcategory`, dtoSubCategorywrite);
+};
+
+export const writeSubTopicInfoAction = createActionAxiosGetVerionToAPIPARMA(
+  WRITE_SUBTOPIC,
+  writeSubTopicInfoAPI
+);
+/////////////////////////
+export const resetWriteTopicAction = () => ({
+  type: RESET_WRITE_TOPIC,
+});
+export const resetWriteSubTopicAction = () => ({
+  type: RESET_WRITE_SUBTOPIC,
+});

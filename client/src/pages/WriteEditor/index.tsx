@@ -2,6 +2,7 @@ import React from "react";
 import Editor from "react-markdown-editor-lite";
 import ReactMarkdown from "react-markdown";
 import "react-markdown-editor-lite/lib/index.css";
+import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core";
 import { Theme, createStyles } from "@material-ui/core/styles";
@@ -41,7 +42,10 @@ const WriteEditor = () => {
 
   return (
     <>
-      <Grid item xs={12} sm={9} md={9}>
+      <Grid item xs={12} sm={12} md={9}>
+        <Typography variant="h3" color="inherit">
+          hello
+        </Typography>
         <Editor
           ref={mdEditor}
           value={value}

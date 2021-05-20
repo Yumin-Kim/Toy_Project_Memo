@@ -3,10 +3,10 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import { ClassNameMap } from "@material-ui/core/styles/withStyles";
 import BlogLinkItem from "@components/ListComponent/BlogLinkItem";
 
-import { CategoryData } from "@typings/route";
+import { TopicListSiderBarInfo } from "@typings/Entity";
 
 interface IBasicListItem {
-  categoryList: CategoryData;
+  categoryList: TopicListSiderBarInfo;
   index: number;
   classes: ClassNameMap<
     | "toolbar"
@@ -31,8 +31,10 @@ const BasicListItem: FC<IBasicListItem> = ({
   return (
     <>
       <BlogLinkItem
-        to={categoryData.path}
-        primary={categoryData.title}
+        to={categoryData.pathname}
+        primary={`${categoryData.title} (${
+          !categoryData.count ? 0 : categoryData.count
+        })`}
         classes={classes}
         icon={<InboxIcon />}
       />
