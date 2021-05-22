@@ -1,4 +1,5 @@
 import { PostStore } from "@typings/reduxType/post";
+import { GET_SUBTOPIC_LIST, RESET_WRITE_POSTING } from "../actions/post/type";
 import {
   GET_TOPICLIST_SIDEBAR,
   GET_ALL_POSTING,
@@ -16,6 +17,7 @@ import {
 
 const postInitialState: PostStore = {
   sideBarCategoryInfos: null,
+  selectSubCategoryListInfos: null,
   mainPostingInfos: null,
   categoryListInfos: null,
   subCategoryListInfos: null,
@@ -41,12 +43,29 @@ const postReducer = (
         ...state,
         writeSubCateogoryMessage: "idle...",
       };
+    case RESET_WRITE_POSTING:
+      return {
+        ...state,
+        writePosingMessage: "idle...",
+      };
     case GET_TOPICLIST_SIDEBAR.REQUEST:
       return state;
     case GET_TOPICLIST_SIDEBAR.SUCCESS:
       return {
         ...state,
         sideBarCategoryInfos: [...action.payload],
+      };
+    case GET_SUBTOPIC_LIST.REQUEST:
+      return state;
+    case GET_SUBTOPIC_LIST.SUCCESS:
+      return {
+        ...state,
+        selectSubCategoryListInfos: [...action.payload],
+      };
+    case GET_SUBTOPIC_LIST.FAILURE:
+      return {
+        ...state,
+        selectSubCategoryListInfos: [],
       };
     case GET_ALL_POSTING.FAILURE:
       return state;
@@ -72,7 +91,7 @@ const postReducer = (
     case WRITE_POSTING.SUCCESS:
       return {
         ...state,
-        writePosingMessage: action.payload.operation,
+        writePosingMessage: "sucess",
       };
     case WRITE_POSTING.FAILURE:
       return {
@@ -87,7 +106,7 @@ const postReducer = (
     case WRITE_TOPIC.SUCCESS:
       return {
         ...state,
-        writeCateogoryMessage: action.payload.operation,
+        writeCateogoryMessage: "sucess",
       };
     case WRITE_TOPIC.FAILURE:
       return {
@@ -102,7 +121,7 @@ const postReducer = (
     case WRITE_SUBTOPIC.SUCCESS:
       return {
         ...state,
-        writeSubCateogoryMessage: action.payload.operation,
+        writeSubCateogoryMessage: "sucess",
       };
     case WRITE_SUBTOPIC.FAILURE:
       return {

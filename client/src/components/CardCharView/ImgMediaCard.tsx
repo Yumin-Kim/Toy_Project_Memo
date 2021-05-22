@@ -1,49 +1,50 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { ReturnPostingBoard } from "@typings/Entity";
+import { Link } from "@material-ui/core";
+import { Link as RouterLink } from "react-router-dom";
+import { imageMediaStyles } from "@layouts/BasicUI/style";
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-  },
-});
-
-export default function ImgMediaCard() {
-  const classes = useStyles();
+interface ImgMediaCardProps {
+  data: ReturnPostingBoard;
+}
+export default function ImgMediaCard({ data }: ImgMediaCardProps) {
+  const classes = imageMediaStyles();
 
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          title="Contemplative Reptile"
-        />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {data.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            작성글 :{data.M_Topics[0].title}
+          </Typography>
+          <br />
+          <Typography variant="body2" color="textSecondary" component="p">
+            {data.createdAt}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
+        <Typography variant="overline" color="initial">
+          <Link
+            component={RouterLink}
+            to={
+              data.M_SubTopics.length !== 0
+                ? `${data.M_Topics[0].pathname}/detail/${data.M_SubTopics[0].title}/${data.id}`
+                : `${data.M_Topics[0].pathname}/detail/${data.id}`
+            }
+            style={{ color: "#3f51b5" }}
+          >
+            Detail Posing
+          </Link>
+        </Typography>
       </CardActions>
     </Card>
   );

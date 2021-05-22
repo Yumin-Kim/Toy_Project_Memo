@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-import MenuItem from "@material-ui/core/MenuItem";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,35 +13,16 @@ import {
   writeSubTopicInfoAction,
   writeTopicInfoAction,
 } from "@actions/post";
-import { Message } from "@material-ui/icons";
-import { useMemo } from "react";
 import { useInput } from "@hooks/useInput";
+import SelectInputComponent from "./SelectInputComponent";
+import { BasicTextFieldsStyles } from "@layouts/BasicUI/style";
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-interface SelectInfo {
+export interface SelectInfo {
   value: string;
   label: string;
 }
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      "& > *": {
-        margin: theme.spacing(1),
-        width: "50ch",
-        padding: "20px",
-        boxSizing: "border-box",
-      },
-    },
-    alert: {
-      width: "100%",
-      "& > * + *": {
-        marginTop: theme.spacing(2),
-      },
-    },
-  })
-);
 
 interface BasicTextFieldsProp {
   onClose: () => void;
@@ -54,7 +33,7 @@ export default function BasicTextFields({
   onClose,
   title,
 }: BasicTextFieldsProp) {
-  const classes = useStyles();
+  const classes = BasicTextFieldsStyles();
   const dispatch = useDispatch();
   ``;
   const {
@@ -74,7 +53,14 @@ export default function BasicTextFields({
       if (title === "Category") {
         const categoryValue: string = (text as string).trim();
         const categoryPathNameValue: string = (text1 as string).trim();
-
+        const filterdata = categoryValue.match(
+          /[\{\}\[\]\/?.,;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/g
+        );
+        if (filterdata && filterdata?.length > 0) {
+          setAlertMessage("카테고리에 특수문자 빼주세요");
+          handleClick();
+          return;
+        }
         const validationPathName = categoryPathNameValue
           .match(/\/*/g)!
           .filter(v => v !== "");
@@ -117,6 +103,7 @@ export default function BasicTextFields({
       setAlertMessage(writeCateogoryMessage);
       handleClick();
       if (writeCateogoryMessage === "sucess") {
+        dispatch(getTopicListSiderBarAction.ACTION.REQUEST());
         timeout = window.setTimeout(() => {
           onClose();
           dispatch(resetWriteTopicAction());
@@ -131,6 +118,7 @@ export default function BasicTextFields({
       setAlertMessage(writeSubCateogoryMessage);
       handleClick();
       if (writeSubCateogoryMessage === "sucess") {
+        dispatch(getTopicListSiderBarAction.ACTION.REQUEST());
         timeout = window.setTimeout(() => {
           onClose();
           dispatch(resetWriteSubTopicAction());
@@ -198,19 +186,10 @@ export default function BasicTextFields({
       ) : (
         <>
           {selectInfo.length !== 0 && (
-            <TextField
-              select
-              label="Select"
-              value={text}
-              name="select"
-              onChange={onChangeText}
-            >
-              {selectInfo.map(option => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+            <SelectInputComponent
+              onChangeText={onChangeText}
+              selectInfo={selectInfo}
+            />
           )}
           <br />
           <TextField

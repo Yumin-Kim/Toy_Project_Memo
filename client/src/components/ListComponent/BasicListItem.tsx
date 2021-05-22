@@ -33,7 +33,7 @@ const BasicListItem: FC<IBasicListItem> = ({
       <BlogLinkItem
         to={categoryData.pathname}
         primary={`${categoryData.title} (${
-          !categoryData.count ? 0 : categoryData.count
+          !categoryData.counter ? 0 : categoryData.counter
         })`}
         classes={classes}
         icon={<InboxIcon />}

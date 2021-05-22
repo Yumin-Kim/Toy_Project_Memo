@@ -17,6 +17,7 @@
     "@material-ui/data-grid": "^4.0.0-alpha.28",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
+    "@material-ui/styles": "^4.11.4",
     "@types/loadable__component": "^5.13.3",
     "@types/react-responsive": "^8.0.2",
     "@types/styled-components": "^5.1.9",
@@ -49,6 +50,8 @@
     "@types/webpack": "^5.28.0",
     "@types/webpack-dev-server": "^3.11.4",
     "babel-loader": "^8.2.2",
+    "babel-plugin-import": "^1.13.3",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "css-loader": "^5.2.4",
     "html-webpack-plugin": "^5.3.1",
     "prettier": "^2.3.0",
@@ -57,6 +60,7 @@
     "style-loader": "^2.0.0",
     "ts-node": "^9.1.1",
     "webpack": "^5.37.0",
+    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"
   }

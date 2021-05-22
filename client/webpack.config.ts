@@ -4,6 +4,7 @@ import webpack from "webpack";
 import HTMLWebpackPlugin from "html-webpack-plugin";
 import { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
 }
@@ -30,7 +31,7 @@ const config: Configuration = {
     },
   },
   entry: {
-    app: "./src",
+    app: "./src/index",
   },
   module: {
     rules: [
@@ -52,6 +53,17 @@ const config: Configuration = {
           plugins: [
             "@babel/plugin-proposal-class-properties",
             "@babel/plugin-transform-runtime",
+            "transform-remove-console",
+            // [
+            //   "babel-plugin-import",
+            //   {
+            //     libraryName: "@material-ui/core",
+            //     // Use "'libraryDirectory': ''," if your bundler does not support ES modules
+            //     libraryDirectory: "",
+            //     camel2DashComponentName: false,
+            //   },
+            //   "core",
+            // ],
           ],
           env: {
             development: {
@@ -101,12 +113,14 @@ const config: Configuration = {
 if (isDevelopment && config.plugins) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
   config.plugins.push(new ReactRefreshWebpackPlugin());
-  // config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: true }));
+  config.plugins.push(
+    new BundleAnalyzerPlugin({ analyzerMode: "server", openAnalyzer: true })
+  );
 }
 if (!isDevelopment && config.plugins) {
   config.plugins.push(new HTMLWebpackPlugin({ template: "./index.html" }));
-  // config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
-  // config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static' }));
+  config.plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
+  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: "static" }));
 }
 
 export default config;

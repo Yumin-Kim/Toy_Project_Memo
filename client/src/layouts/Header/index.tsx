@@ -11,27 +11,10 @@ import { makeStyles } from "@material-ui/core";
 import { Theme, createStyles } from "@material-ui/core/styles";
 import { Link } from "@material-ui/core";
 import SimpleModal from "@components/UtilComponent/ModalComponent";
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    button: {
-      "& > *": {
-        margin: theme.spacing(1),
-      },
-    },
-    title: {
-      flexGrow: 1,
-    },
-  })
-);
+import { HeaderStyle } from "@layouts/BasicUI/style";
 
 const Header = () => {
-  const classes = useStyles();
+  const classes = HeaderStyle();
   const [openModal, setOpenModal] = useState(false);
   const [openModalSubcategory, setOpenModalSubcategory] = useState(false);
   const onClickOpenModal = useCallback(() => {

@@ -8,13 +8,13 @@ import clsx from "clsx";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import BasicListItem from "../../components/ListComponent/BasicListItem";
-import { useStyles } from "./style";
 import { useSelector, useDispatch } from "react-redux";
 import { ROOTSTATE } from "reducers/root";
 import { getTopicListSiderBarAction } from "@actions/post";
+import { siderStyles } from "@layouts/BasicUI/style";
 
 export default function NestedList() {
-  const classes = useStyles();
+  const classes = siderStyles();
   const theme = useTheme();
   const { sideBarCategoryInfos } = useSelector(
     (state: ROOTSTATE) => state.post

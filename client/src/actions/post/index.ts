@@ -3,7 +3,11 @@ import {
   DTOPostingWrite,
   DTOSubCategoryWrite,
 } from "@typings/DTO";
-import { ReturnPostingBoard, TopicListSiderBarInfo } from "@typings/Entity";
+import {
+  ReturnPostingBoard,
+  SubTopicEntity,
+  TopicListSiderBarInfo,
+} from "@typings/Entity";
 import {
   createActionAxiosGetVerion,
   createActionAxiosGetVerionToAPIPARMA,
@@ -21,9 +25,11 @@ import {
   WRITE_SUBTOPIC,
   WRITE_TOPIC,
   RESET_WRITE_SUBTOPIC,
+  GET_SUBTOPIC_LIST,
+  RESET_WRITE_POSTING,
 } from "./type";
 
-axios.defaults.baseURL = "http://localhost:3000/api";
+axios.defaults.baseURL = "https://kimminblog.herokuapp.com/api";
 interface BasicqueryString {
   offset: number;
   limit: number;
@@ -41,6 +47,19 @@ export const getTopicListSiderBarAPI = async (): Promise<
 export const getTopicListSiderBarAction = createActionAxiosGetVerion(
   GET_TOPICLIST_SIDEBAR,
   getTopicListSiderBarAPI
+);
+
+/////////////////////////
+/////////////////////////
+export const getSubTopicListAPI = async (
+  topicId: number
+): Promise<SubTopicEntity[]> => {
+  return await axios.get(`/category/list/subcategory/${topicId}`);
+};
+
+export const getSubTopicListAction = createActionAxiosGetVerionToAPIPARMA(
+  GET_SUBTOPIC_LIST,
+  getSubTopicListAPI
 );
 
 /////////////////////////
@@ -166,4 +185,7 @@ export const resetWriteTopicAction = () => ({
 });
 export const resetWriteSubTopicAction = () => ({
   type: RESET_WRITE_SUBTOPIC,
+});
+export const resetWritePostingAction = () => ({
+  type: RESET_WRITE_POSTING,
 });

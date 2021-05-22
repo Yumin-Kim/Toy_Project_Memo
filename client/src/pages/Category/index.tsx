@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import ImgMediaCard from "../../components/CardCharView/ImgMediaCard";
 import { useParams, Link as RouterLink } from "react-router-dom";
@@ -9,9 +9,17 @@ import {
   getSubTopicInfoAction,
   getTopicPostingInfoAction,
 } from "@actions/post";
+import Typography from "@material-ui/core/Typography";
+import {
+  PostingBoardInfo,
+  ReducePostingBoard,
+  ReturnPostingBoard,
+} from "@typings/Entity";
 
 const Category = () => {
   const { category, subcategory } = useParams<IuseParam>();
+  const [postingBoard, setPosingBoard] =
+    useState<ReducePostingBoard[] | null>(null);
   const { categoryListInfos, subCategoryListInfos, sideBarCategoryInfos } =
     useSelector((state: ROOTSTATE) => state.post);
   const dispatch = useDispatch();
@@ -39,31 +47,62 @@ const Category = () => {
         }
       }
     }
-    // category, subcategory 요소를 통해 조회
-    //componentDidMount
-    //비동기 요청 리덕스 store확인하여 비어 있으면 요청
   }, [sideBarCategoryInfos, category, subcategory]);
+
+  useEffect(() => {
+    if (categoryListInfos?.length !== 0) {
+      console.log("useEffect categoryListInfos?.length !== 0");
+
+      const parseData = categoryListInfos?.reduce((prev, cur, index) => {
+        const customObj = {} as ReducePostingBoard;
+        (Object.keys(cur) as (keyof ReturnPostingBoard)[]).map(value => {
+          if (value !== "M_Topics") {
+            if (value !== "M_SubTopics") {
+              if (cur[value] !== "null") {
+                customObj[value] = cur[value];
+              }
+            }
+            if (cur.M_SubTopics.length !== 0) {
+              customObj.subTitle = cur["M_SubTopics"][0].title;
+            }
+          } else {
+            customObj.Maintitle = cur["M_Topics"][0].title;
+          }
+        });
+        prev.push(customObj);
+        return prev;
+      }, [] as ReducePostingBoard[]);
+      console.log(parseData);
+
+      if (parseData) {
+        setPosingBoard(parseData);
+        console.log("pareData", postingBoard);
+      }
+    } else {
+      setPosingBoard(null);
+    }
+  }, [categoryListInfos]);
+
   return (
     <>
-      {categoryListInfos?.length !== 0 && !subcategory ? (
-        <Grid item xs={12} sm={6} md={3}>
-          <ImgMediaCard />
-        </Grid>
+      {postingBoard && postingBoard?.length !== 0 ? (
+        <>
+          <Grid item xs={12} sm={12} md={12}>
+            <Typography variant="h3" color="initial">
+              {postingBoard[0].Maintitle}
+            </Typography>
+          </Grid>
+          {categoryListInfos?.map((value, index) => (
+            <Grid item xs={12} sm={6} md={4}>
+              <ImgMediaCard data={value} key={value.M_Topics.length * 2} />
+            </Grid>
+          ))}
+        </>
       ) : (
         <Grid item xs={12} sm={6} md={9}>
           준비중입니다
         </Grid>
       )}
-      {/* <Grid item xs={12} sm={6} md={3}>
-        <ImgMediaCard />
-      </Grid> */}
-      {/* <Grid item xs={12} sm={6} md={3}>
-        <RouterLink to="/linux/detail/1">Linux//1 포스팅글</RouterLink>
-        <RouterLink to="/linux/unix">/linux/unix 세부카테고리 조회 </RouterLink>
-        <RouterLink to="/linux/detail/unix/2">
-          Linux/unix/2 세부카테고리 포스팅 조회{" "}
-        </RouterLink>
-      </Grid> */}
     </>
   );
 };

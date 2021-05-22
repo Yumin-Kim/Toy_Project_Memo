@@ -3,11 +3,12 @@ export interface TopicListSiderBarInfo {
   title: string;
   pathname: string;
   createdAt: string;
-  count: number;
+  counter: number;
 }
 export interface PostingBoardInfo {
+  id: number;
   title: string;
-  deescription: string;
+  description: string;
   createdAt: string;
   updatedAt?: string;
   deletedAt?: string;
@@ -26,4 +27,9 @@ export interface SubTopicEntity {
 export interface ReturnPostingBoard extends PostingBoardInfo {
   M_SubTopics: [] | SubTopicEntity[];
   M_Topics: TopicEntity[];
+}
+
+export interface ReducePostingBoard extends PostingBoardInfo {
+  subTitle: Pick<SubTopicEntity, "title">;
+  Maintitle: Pick<TopicEntity, "title">;
 }

@@ -12,6 +12,7 @@ import {
   T_GetAllPostingAction,
   T_GetDetailSubTopicPostingAction,
   T_GetDetailTopicPostingAction,
+  T_GetSubTopicListAction,
   T_GetSubTopicPostingAction,
   T_GetTopicListSiderBarAction,
   T_GetTopicPostingAction,
@@ -19,13 +20,22 @@ import {
   T_WriteSubTopicIngoAction,
   T_WriteTopicIngoAction,
 } from "@actions/post/type";
-import { all, call, fork, put, takeLatest } from "redux-saga/effects";
+import {
+  all,
+  call,
+  fork,
+  put,
+  takeEvery,
+  takeLatest,
+} from "redux-saga/effects";
 import { getTopicPostingInfoAction } from "@actions/post/index";
+import { getSubTopicListAction } from "../actions/post/index";
 
 function* getsiderBarCategorySagaFunc(action: T_GetTopicListSiderBarAction) {
   try {
     if (action.type === "REQUEST_GET_TOPICLIST_SIDEBAR") {
       const { data } = yield call(getTopicListSiderBarAction.API);
+
       yield put(getTopicListSiderBarAction.ACTION.SUCCESS(data));
     }
   } catch (error) {
@@ -34,9 +44,26 @@ function* getsiderBarCategorySagaFunc(action: T_GetTopicListSiderBarAction) {
 }
 
 function* watchGetSideBarCategory() {
-  yield takeLatest(
+  yield takeEvery(
     getTopicListSiderBarAction.ACTION.REQUEST,
     getsiderBarCategorySagaFunc
+  );
+}
+function* getSubCategoryListSagaFunc(action: T_GetSubTopicListAction) {
+  try {
+    if (action.type === "REQUEST_GET_SUBTOPIC_LIST") {
+      const { data } = yield call(getSubTopicListAction.API, action.payload);
+      yield put(getSubTopicListAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(getSubTopicListAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchGetSubCategoryList() {
+  yield takeLatest(
+    getSubTopicListAction.ACTION.REQUEST,
+    getSubCategoryListSagaFunc
   );
 }
 
@@ -52,7 +79,7 @@ function* getAllPostingSagaFunc(action: T_GetAllPostingAction) {
 }
 
 function* watchGetAllPosting() {
-  yield takeLatest(getAllPostingAction.ACTION.REQUEST, getAllPostingSagaFunc);
+  yield takeEvery(getAllPostingAction.ACTION.REQUEST, getAllPostingSagaFunc);
 }
 
 function* getTopicPostingSagaFunc(action: T_GetTopicPostingAction) {
@@ -181,6 +208,7 @@ function* watchDetailSubTopicPosting() {
 
 export default function* postSaga() {
   yield all([
+    fork(watchGetSubCategoryList),
     fork(watchGetSideBarCategory),
     fork(watchGetAllPosting),
     fork(watchGetTopicPosting),

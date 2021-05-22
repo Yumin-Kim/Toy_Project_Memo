@@ -4,8 +4,10 @@ import {
   getDetailSubTopicInfoAction,
   getDetailTopicInfoAction,
   getSubTopicInfoAction,
+  getSubTopicListAction,
   getTopicListSiderBarAction,
   getTopicPostingInfoAction,
+  resetWritePostingAction,
   resetWriteSubTopicAction,
   resetWriteTopicAction,
   writePostingInfoAction,
@@ -17,6 +19,12 @@ export const GET_TOPICLIST_SIDEBAR = {
   REQUEST: "REQUEST_GET_TOPICLIST_SIDEBAR",
   SUCCESS: "SUCCESS_GET_TOPICLIST_SIDEBAR",
   FAILURE: "FAILURE_GET_TOPICLIST_SIDEBAR",
+} as const;
+
+export const GET_SUBTOPIC_LIST = {
+  REQUEST: "REQUEST_GET_SUBTOPIC_LIST",
+  SUCCESS: "SUCCESS_GET_SUBTOPIC_LIST",
+  FAILURE: "FAILURE_GET_SUBTOPIC_LIST",
 } as const;
 
 export const GET_DETAIL_TOPICPOSTING = {
@@ -68,9 +76,13 @@ export const WRITE_SUBTOPIC = {
 
 export const RESET_WRITE_TOPIC = "RESET_WRITE_TOPIC" as const;
 export const RESET_WRITE_SUBTOPIC = "RESET_WRITE_SUBTOPIC" as const;
+export const RESET_WRITE_POSTING = "RESET_WRITE_POSTING" as const;
 
 export type T_GetTopicListSiderBarAction = EntityAction<
   typeof getTopicListSiderBarAction
+>;
+export type T_GetSubTopicListAction = EntityAction<
+  typeof getSubTopicListAction
 >;
 export type T_GetAllPostingAction = EntityAction<typeof getAllPostingAction>;
 export type T_GetTopicPostingAction = EntityAction<
@@ -96,9 +108,13 @@ export type T_resetWriteTopicAction = ReturnType<typeof resetWriteTopicAction>;
 export type T_resetWriteSubTopicAction = ReturnType<
   typeof resetWriteSubTopicAction
 >;
+export type T_resetWritePostingAction = ReturnType<
+  typeof resetWritePostingAction
+>;
 
 export type POST_RETURN_ACTIONS =
   | T_GetAllPostingAction
+  | T_GetSubTopicListAction
   | T_GetTopicListSiderBarAction
   | T_GetTopicPostingAction
   | T_GetSubTopicPostingAction
@@ -108,4 +124,5 @@ export type POST_RETURN_ACTIONS =
   | T_WriteTopicIngoAction
   | T_resetWriteTopicAction
   | T_resetWriteSubTopicAction
+  | T_resetWritePostingAction
   | T_WriteSubTopicIngoAction;
