@@ -27,23 +27,63 @@ component={DetailInfo}
 ```
 
 - **/api/category**
-  - GET /:category
+
+  - GET /
+    - 기본 PostingBorad정보 제공
+    - return PostingBoradInfo[]
+
+  * GET /category/list
+    - 카테고리 정보 전송
+    * Topics 테이블 과 PostingBorad 테이블을 통해서 정보 가공후에 전달
+    * return IReturnCategoryListInfo[]
+  * GET /:category
     - 선택 카테고리 정보 제공
-  - GET /:category/detail/:id
+    * pathname으로 전달 받은 값을 Topic테이블에서 findOnegn id찾기 그후 매핑 테이블을 통해 id값을 찾은 후 postingBoard에서 찾아서 가공후 전달
+      - 조회 Topic테이블 ID값이 SubTopic에 id가 있는지 조회
+      - 조회 SubTopic의 ID값을 postingBoard의 매핑 테이블과 조회
+      - 조회 결과로 Topic , SubTopic의 title , 조회 한후 정보 가공
+    * return ReturnIncludeSubCategoryInfo[]
+  * GET /:category/detail/:id
     - 선택 카테고리의 원하는 포스팅 선택한후 정보 제공
-  - GET /:category/:subcategory
+    * id값을 통해서 Postingboard테이블에서 조회한 후 전송
+    * return PostingBoradInfo
+  * GET /:category/:subcategory
     - 선택 카테고리의 세부 카테고리 조회
-  - GET /:category/detail/:subcategory/:id
+    * pathname의 Category를 통해id값을 알아내고 SubTopic테이블의 topicID조회후 매핑 테이블을 통해 postingBoard알아낸후 전달
+    * SubTopic title값도 같이 전달
+    * return IncludeSubCategoryPosingBoradInfo[]
+  * GET /:category/detail/:subcategory/:id
     - 선택 카테고리의 세부 카테고리 선택 포스팅 선택한후 정보 제공
-  - POST /write
+    * return PostingBoardInfo
+  * POST /write/posting
     - 작성글 저장 api
-    - body로 전달
+    - body로 전달 >> DTOPostingWrite
+    * return {operation : "sucess"}
+
+  - POST /write/category
+
+    - body DTOCategoryWrite
+    - return {operation : "sucess"}
+
+  - POST /write/subcategory
+    - body DTOSubCategoryWrite
+    - return {operation : "sucess"}
+
+---
+
 - **/api/todo**
   - GET /list?limit={}&offset={}
     - todo전송
+    * return ReturnTodoList[]
   - POST /list
-    - body 정보 전송
-  - DELETE /list?id={}
+    - body 정보 전송 >>DTOTodoWrite
+    * 추가된 항목값 전송
+    * return ReturnTodoList
+  - DELETE /list?id={}&offset={}
     - id조회후 글 삭제
-  - PATCH /list
-    - body 정보 전송 >> body 정보에 따라 수정
+    * offset , id 값을 통해 offset다음 값을 전송한다.
+    * return ReturnTodoList
+  - PATCH /list?id={}
+    - body 정보 전송 >> Partial< DTOTodoWrite>
+    * id 값으로 해당 컬럼 수정후 수정된 정보 전달
+    * return ReturnTodoList
