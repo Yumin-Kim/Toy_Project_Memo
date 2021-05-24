@@ -53,7 +53,7 @@ const config: Configuration = {
           plugins: [
             "@babel/plugin-proposal-class-properties",
             "@babel/plugin-transform-runtime",
-            "transform-remove-console",
+            // "transform-remove-console",
             // [
             //   "babel-plugin-import",
             //   {

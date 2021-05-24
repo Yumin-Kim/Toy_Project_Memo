@@ -15,8 +15,8 @@ const configure = () => {
       composeWithDevTools(applyMiddleware(...middlewares))
     );
   } else {
+    store = createStore(RootReducer, applyMiddleware(...middlewares));
   }
-  store = createStore(RootReducer, applyMiddleware(...middlewares));
   sagaMiddleWare.run(RootSaga);
   return store;
 };

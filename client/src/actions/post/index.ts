@@ -29,7 +29,8 @@ import {
   RESET_WRITE_POSTING,
 } from "./type";
 
-axios.defaults.baseURL = "https://kimminblog.herokuapp.com/api";
+// axios.defaults.baseURL = "https://kimminblog.herokuapp.com/api";
+axios.defaults.baseURL = "http://localhost:3000/api";
 interface BasicqueryString {
   offset: number;
   limit: number;

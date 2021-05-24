@@ -10,16 +10,20 @@ import {
   getTopicPostingInfoAction,
 } from "@actions/post";
 import Typography from "@material-ui/core/Typography";
+import { SelectInfo } from "../../components/UtilComponent/Formcomponent";
 import {
   PostingBoardInfo,
   ReducePostingBoard,
   ReturnPostingBoard,
 } from "@typings/Entity";
+import SelectInputComponent from "@components/UtilComponent/SelectInputComponent";
 
 const Category = () => {
   const { category, subcategory } = useParams<IuseParam>();
   const [postingBoard, setPosingBoard] =
     useState<ReducePostingBoard[] | null>(null);
+  const [selectSubCategory, setSelectSubCategory] =
+    useState<SelectInfo[] | null>(null);
   const { categoryListInfos, subCategoryListInfos, sideBarCategoryInfos } =
     useSelector((state: ROOTSTATE) => state.post);
   const dispatch = useDispatch();
@@ -52,7 +56,8 @@ const Category = () => {
   useEffect(() => {
     if (categoryListInfos?.length !== 0) {
       console.log("useEffect categoryListInfos?.length !== 0");
-
+      const HashSubTitle = new Set();
+      const HashSubID = new Set();
       const parseData = categoryListInfos?.reduce((prev, cur, index) => {
         const customObj = {} as ReducePostingBoard;
         (Object.keys(cur) as (keyof ReturnPostingBoard)[]).map(value => {
@@ -64,6 +69,8 @@ const Category = () => {
             }
             if (cur.M_SubTopics.length !== 0) {
               customObj.subTitle = cur["M_SubTopics"][0].title;
+              HashSubTitle.add(cur["M_SubTopics"][0].title);
+              HashSubID.add(cur["M_SubTopics"][0].id);
             }
           } else {
             customObj.Maintitle = cur["M_Topics"][0].title;
@@ -73,13 +80,26 @@ const Category = () => {
         return prev;
       }, [] as ReducePostingBoard[]);
       console.log(parseData);
-
+      const selectInfos = (Array.from(HashSubID) as string[]).reduce(
+        (prev, cur, index) => {
+          const selectInfo = {} as SelectInfo;
+          selectInfo.value = cur;
+          selectInfo.label = (Array.from(HashSubTitle) as string[])[index];
+          prev.push(selectInfo);
+          return prev;
+        },
+        [] as SelectInfo[]
+      );
+      console.log(HashSubTitle);
       if (parseData) {
         setPosingBoard(parseData);
-        console.log("pareData", postingBoard);
+      }
+      if (selectInfos) {
+        setSelectSubCategory(selectInfos);
       }
     } else {
       setPosingBoard(null);
+      selectSubCategory(null);
     }
   }, [categoryListInfos]);
 
@@ -91,6 +111,9 @@ const Category = () => {
             <Typography variant="h3" color="initial">
               {postingBoard[0].Maintitle}
             </Typography>
+            {/* {selectSubCategory && (
+              <SelectInputComponent selectInfo={selectSubCategory} />
+            )} */}
           </Grid>
           {categoryListInfos?.map((value, index) => (
             <Grid item xs={12} sm={6} md={4}>
