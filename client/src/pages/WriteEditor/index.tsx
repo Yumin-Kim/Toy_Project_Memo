@@ -35,9 +35,8 @@ const WriteEditor = () => {
   } = useSelector((state: ROOTSTATE) => state.post);
   const dispatch = useDispatch();
   const handleEditorChange = ({ html, text }: any) => {
-    const newValue = text.replace(/\d/g, "");
     // console.log(newValue.replaceAll("\n", "__"));
-    setValue(newValue);
+    setValue(text);
   };
   //서버 전송후 replaceAll할지 안할지 결정
 

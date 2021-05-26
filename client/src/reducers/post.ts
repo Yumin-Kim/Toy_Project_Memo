@@ -131,6 +131,7 @@ const postReducer = (
     case GET_DETAIL_TOPICPOSTING.REQUEST:
       return {
         ...state,
+        detailSubCateogoryInfo: null,
       };
     case GET_DETAIL_TOPICPOSTING.SUCCESS:
       return {
@@ -144,6 +145,7 @@ const postReducer = (
     case GET_DETAIL_SUBTOPICPOSTING.REQUEST:
       return {
         ...state,
+        detailSubCateogoryInfo: null,
       };
     case GET_DETAIL_SUBTOPICPOSTING.SUCCESS:
       return {

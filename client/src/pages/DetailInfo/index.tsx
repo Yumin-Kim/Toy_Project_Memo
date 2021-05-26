@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import { IuseParam } from "@typings/route";
-import ReactMarkdown from "react-markdown";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTATE } from "../../reducers/root";

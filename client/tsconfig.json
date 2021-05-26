@@ -10,8 +10,8 @@
       "DOM",
       "DOM.Iterable",
       "ES2015",
-      "ES2020"
-      "ESNext",
+      "ES2020",
+      "ESNext"
     ] /* Specify library files to be included in the compilation. */,
     // "allowJs": true,                             /* Allow javascript files to be compiled. */
     // "checkJs": true,                             /* Report errors in .js files. */

@@ -24,6 +24,10 @@ const WriteEditor = loadable(
   () => import(/* webpackChunkName: "WriteEditor" */ "@pages/WriteEditor")
 );
 
+const ReWriteEditor = loadable(
+  () => import(/* webpackChunkName: "ReWriteEditor" */ "@pages/ReWriteEditor")
+);
+
 //clsx 반응형 웹시 class 변경용이
 export default function PermanentDrawerLeft() {
   const classes = BasicUIuseStyles();
@@ -40,6 +44,7 @@ export default function PermanentDrawerLeft() {
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route path="/write" component={WriteEditor} />
+                <Route path="/rewrite" component={ReWriteEditor} />
                 <Route
                   path="/:category/detail/:subcategory/:id"
                   component={DetailInfo}

@@ -17,6 +17,7 @@ import {
   ReturnPostingBoard,
 } from "@typings/Entity";
 import SelectInputComponent from "@components/UtilComponent/SelectInputComponent";
+import { useCallback } from "react";
 
 const Category = () => {
   const { category, subcategory } = useParams<IuseParam>();
@@ -79,7 +80,6 @@ const Category = () => {
         prev.push(customObj);
         return prev;
       }, [] as ReducePostingBoard[]);
-      console.log(parseData);
       const selectInfos = (Array.from(HashSubID) as string[]).reduce(
         (prev, cur, index) => {
           const selectInfo = {} as SelectInfo;
@@ -90,7 +90,7 @@ const Category = () => {
         },
         [] as SelectInfo[]
       );
-      console.log(HashSubTitle);
+      console.log("HashSubTitle", selectInfos);
       if (parseData) {
         setPosingBoard(parseData);
       }
@@ -103,6 +103,10 @@ const Category = () => {
     }
   }, [categoryListInfos]);
 
+  const onChageSelectBox = useCallback((e: React.ChangeEvent) => {
+    console.log((e.target as any).value);
+  }, []);
+
   return (
     <>
       {postingBoard && postingBoard?.length !== 0 ? (
@@ -110,10 +114,15 @@ const Category = () => {
           <Grid item xs={12} sm={12} md={12}>
             <Typography variant="h3" color="initial">
               {postingBoard[0].Maintitle}
+              {selectSubCategory && (
+                <SelectInputComponent
+                  selectInfo={selectSubCategory}
+                  onChangeText={onChageSelectBox}
+                />
+              )}
+              <br />
             </Typography>
-            {/* {selectSubCategory && (
-              <SelectInputComponent selectInfo={selectSubCategory} />
-            )} */}
+            <br />
           </Grid>
           {categoryListInfos?.map((value, index) => (
             <Grid item xs={12} sm={6} md={4}>
