@@ -1,5 +1,10 @@
 import { PostStore } from "@typings/reduxType/post";
-import { GET_SUBTOPIC_LIST, RESET_WRITE_POSTING } from "../actions/post/type";
+import {
+  GET_SUBTOPIC_LIST,
+  Mapping_PATHNAME,
+  RESET_WRITE_POSTING,
+  REWRITE_POSTING,
+} from "../actions/post/type";
 import {
   GET_TOPICLIST_SIDEBAR,
   GET_ALL_POSTING,
@@ -26,6 +31,9 @@ const postInitialState: PostStore = {
   writePosingMessage: null,
   writeCateogoryMessage: null,
   writeSubCateogoryMessage: null,
+  rewriteStatusMessage: null,
+  updateDetailInfo: null,
+  prevPathname: null,
 };
 
 const postReducer = (
@@ -128,6 +136,26 @@ const postReducer = (
         ...state,
         writeSubCateogoryMessage: "Failure",
       };
+
+    case REWRITE_POSTING.REQUEST:
+      return {
+        ...state,
+        rewriteStatusMessage: "Request...",
+        detailSubCateogoryInfo: null,
+        detailCateogoryInfo: null,
+      };
+    case REWRITE_POSTING.SUCCESS:
+      return {
+        ...state,
+        updateDetailInfo: { ...action.payload },
+        rewriteStatusMessage: "sucess",
+      };
+    case REWRITE_POSTING.FAILURE:
+      return {
+        ...state,
+        rewriteStatusMessage: "Failure",
+      };
+
     case GET_DETAIL_TOPICPOSTING.REQUEST:
       return {
         ...state,
@@ -168,6 +196,11 @@ const postReducer = (
     case GET_SUBTOPIC_POSTING.FAILURE:
       return {
         ...state,
+      };
+    case Mapping_PATHNAME:
+      return {
+        ...state,
+        prevPathname: action.payload,
       };
     default:
       return state;

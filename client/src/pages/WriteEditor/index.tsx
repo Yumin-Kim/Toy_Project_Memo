@@ -19,10 +19,12 @@ import {
 import { useInput } from "@hooks/useInput";
 import { useCallback } from "react";
 import { writePostingInfoAction } from "../../actions/post/index";
+import { Redirect } from "react-router-dom";
 
 const WriteEditor = () => {
   const mdEditor = useRef(null);
   const [value, setValue] = useState<string>("");
+  const [redirectValid, setRedirectValid] = useState(false);
   const [subCategory, setSubCategory] = useState<string>("");
   const [selectInfo, setSelectInfo] = useState<SelectInfo[]>([]);
   const [selectInfoList, setSelectInfoList] = useState<SelectInfo[]>([]);
@@ -133,6 +135,7 @@ const WriteEditor = () => {
     if (writePosingMessage === "sucess") {
       dispatch(resetWritePostingAction());
       alert("등록 완료");
+      setRedirectValid(true);
     }
     if (writePosingMessage === "idle...") {
       dispatch(getTopicListSiderBarAction.ACTION.REQUEST());
@@ -142,50 +145,59 @@ const WriteEditor = () => {
 
   return (
     <>
-      <Grid item xs={12} sm={12} md={12}>
-        <Typography variant="h3" color="inherit">
-          <SelectInputComponent
-            onChangeText={onChangeSelectBox}
-            selectInfo={selectInfo}
-          />
-        </Typography>
-        {selectSubCategoryListInfos && selectSubCategoryListInfos.length !== 0 && (
-          <>
+      {!redirectValid ? (
+        <Grid item xs={12} sm={12} md={12}>
+          <Typography variant="h3" color="inherit">
             <SelectInputComponent
-              onChangeText={onChangeSubSelect}
-              selectInfo={selectInfoList}
+              onChangeText={onChangeSelectBox}
+              selectInfo={selectInfo}
             />
-            <br />
-          </>
-        )}
-        <br />
+          </Typography>
+          {selectSubCategoryListInfos &&
+            selectSubCategoryListInfos.length !== 0 && (
+              <>
+                <SelectInputComponent
+                  onChangeText={onChangeSubSelect}
+                  selectInfo={selectInfoList}
+                />
+                <br />
+              </>
+            )}
+          <br />
 
-        <Typography variant="h6" color="initial">
-          타이틀 :{" "}
-          <TextField
-            id="asd"
-            label=""
-            value={headline}
-            onChange={onChangeHeadLine}
-            style={{ marginRight: "20px" }}
+          <Typography variant="h6" color="initial">
+            타이틀 :{" "}
+            <TextField
+              id="asd"
+              label=""
+              value={headline}
+              onChange={onChangeHeadLine}
+              style={{ marginRight: "20px" }}
+            />
+            <ButtonGroup variant="contained" color="default" aria-label="">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onClickSubmit}
+              >
+                게시
+              </Button>
+            </ButtonGroup>
+          </Typography>
+          <br />
+          <Editor
+            ref={mdEditor}
+            value={value}
+            style={{
+              height: "500px",
+            }}
+            onChange={handleEditorChange}
+            renderHTML={text => <ReactMarkdown children={text} />}
           />
-          <ButtonGroup variant="contained" color="default" aria-label="">
-            <Button variant="contained" color="primary" onClick={onClickSubmit}>
-              게시
-            </Button>
-          </ButtonGroup>
-        </Typography>
-        <br />
-        <Editor
-          ref={mdEditor}
-          value={value}
-          style={{
-            height: "500px",
-          }}
-          onChange={handleEditorChange}
-          renderHTML={text => <ReactMarkdown children={text} />}
-        />
-      </Grid>
+        </Grid>
+      ) : (
+        <Redirect to="/" />
+      )}
     </>
   );
 };

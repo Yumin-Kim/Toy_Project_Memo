@@ -20,3 +20,10 @@ export interface DTOTodoWrite {
   description: string;
   created: string;
 }
+
+export interface DTOReWritePosting {
+  title: string;
+
+  postingid: string;
+  description: string;
+}

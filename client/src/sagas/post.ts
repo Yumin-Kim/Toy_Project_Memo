@@ -7,6 +7,7 @@ import {
   getSubTopicInfoAction,
   getDetailTopicInfoAction,
   getDetailSubTopicInfoAction,
+  RewritePostingAction,
 } from "@actions/post";
 import {
   T_GetAllPostingAction,
@@ -16,6 +17,7 @@ import {
   T_GetSubTopicPostingAction,
   T_GetTopicListSiderBarAction,
   T_GetTopicPostingAction,
+  T_ReWriteSubTopicIngoAction,
   T_WritePostingIngoAction,
   T_WriteSubTopicIngoAction,
   T_WriteTopicIngoAction,
@@ -149,6 +151,23 @@ function* watchWriteSubTopic() {
     writeSubTopicSagaFunc
   );
 }
+function* rewritePostinngSagaFunc(action: T_ReWriteSubTopicIngoAction) {
+  try {
+    if (action.type === "REQUEST_REWRITE_POSTING") {
+      const { data } = yield call(RewritePostingAction.API, action.payload);
+      yield put(RewritePostingAction.ACTION.SUCCESS(data));
+    }
+  } catch (error) {
+    yield put(RewritePostingAction.ACTION.FAILURE(error));
+  }
+}
+
+function* watchReWritePosting() {
+  yield takeLatest(
+    RewritePostingAction.ACTION.REQUEST,
+    rewritePostinngSagaFunc
+  );
+}
 function* GetSubTopicPostingSagaFunc(action: T_GetSubTopicPostingAction) {
   try {
     if (action.type === "REQUEST_GET_SUBTOPIC_POSTING") {
@@ -218,5 +237,6 @@ export default function* postSaga() {
     fork(watchWriteSubTopic),
     fork(watchWriteTopic),
     fork(watchWritePosting),
+    fork(watchReWritePosting),
   ]);
 }

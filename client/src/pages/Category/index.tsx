@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import ImgMediaCard from "../../components/CardCharView/ImgMediaCard";
-import { useParams, Link as RouterLink } from "react-router-dom";
+import { useParams, Link as RouterLink, Link } from "react-router-dom";
 import { IuseParam } from "@typings/route";
 import { useSelector, useDispatch } from "react-redux";
 import { ROOTSTATE } from "reducers/root";
@@ -11,13 +11,10 @@ import {
 } from "@actions/post";
 import Typography from "@material-ui/core/Typography";
 import { SelectInfo } from "../../components/UtilComponent/Formcomponent";
-import {
-  PostingBoardInfo,
-  ReducePostingBoard,
-  ReturnPostingBoard,
-} from "@typings/Entity";
+import { ReducePostingBoard, ReturnPostingBoard } from "@typings/Entity";
 import SelectInputComponent from "@components/UtilComponent/SelectInputComponent";
 import { useCallback } from "react";
+import { Button } from "@material-ui/core";
 
 const Category = () => {
   const { category, subcategory } = useParams<IuseParam>();
@@ -25,6 +22,7 @@ const Category = () => {
     useState<ReducePostingBoard[] | null>(null);
   const [selectSubCategory, setSelectSubCategory] =
     useState<SelectInfo[] | null>(null);
+  const [changePostingBoard, setChangePostingBoard] = useState(false);
   const { categoryListInfos, subCategoryListInfos, sideBarCategoryInfos } =
     useSelector((state: ROOTSTATE) => state.post);
   const dispatch = useDispatch();
@@ -32,6 +30,10 @@ const Category = () => {
     const data = sideBarCategoryInfos?.find(
       value => value.pathname === "/" + category
     );
+    setChangePostingBoard(false);
+
+    // setPosingBoard(null);
+    // setSelectSubCategory(null);
     if (data) {
       if (category) {
         if (subcategory) {
@@ -56,7 +58,6 @@ const Category = () => {
 
   useEffect(() => {
     if (categoryListInfos?.length !== 0) {
-      console.log("useEffect categoryListInfos?.length !== 0");
       const HashSubTitle = new Set();
       const HashSubID = new Set();
       const parseData = categoryListInfos?.reduce((prev, cur, index) => {
@@ -93,19 +94,54 @@ const Category = () => {
       console.log("HashSubTitle", selectInfos);
       if (parseData) {
         setPosingBoard(parseData);
+        // setChangePostingBoard(false);
       }
-      if (selectInfos) {
+      if (selectInfos.length !== 0) {
         setSelectSubCategory(selectInfos);
+      }
+      if (selectInfos.length === 0) {
+        setSelectSubCategory(null);
       }
     } else {
       setPosingBoard(null);
-      selectSubCategory(null);
+      setSelectSubCategory(null);
     }
-  }, [categoryListInfos]);
+  }, [categoryListInfos, subCategoryListInfos]);
 
-  const onChageSelectBox = useCallback((e: React.ChangeEvent) => {
-    console.log((e.target as any).value);
-  }, []);
+  const onChageSelectBox = useCallback(
+    (e: React.ChangeEvent) => {
+      console.log(e);
+      if (sideBarCategoryInfos) {
+        let data;
+        if (postingBoard) {
+          data = sideBarCategoryInfos.find(
+            x => x.title === postingBoard[0].Maintitle
+          );
+        }
+        if (data) {
+          setChangePostingBoard(true);
+          dispatch(
+            getSubTopicInfoAction.ACTION.REQUEST({
+              subTopic: (e.target as any).value,
+              topic: String(data.id),
+            })
+          );
+          (e.target as any).value = "";
+        }
+      }
+    },
+    [changePostingBoard, postingBoard]
+  );
+
+  const onClickChangePostingBoard = useCallback(() => {
+    console.log("onClickChangePostingBoard");
+    if (selectSubCategory) {
+      const data = [...selectSubCategory];
+      console.log(data === selectSubCategory);
+      setSelectSubCategory(data);
+    }
+    setChangePostingBoard(false);
+  }, [selectSubCategory]);
 
   return (
     <>
@@ -114,21 +150,49 @@ const Category = () => {
           <Grid item xs={12} sm={12} md={12}>
             <Typography variant="h3" color="initial">
               {postingBoard[0].Maintitle}
-              {selectSubCategory && (
-                <SelectInputComponent
-                  selectInfo={selectSubCategory}
-                  onChangeText={onChageSelectBox}
-                />
-              )}
-              <br />
+              <Typography variant="h4" color="initial">
+                {selectSubCategory && (
+                  <SelectInputComponent
+                    selectCategoryValid={true}
+                    selectInfo={selectSubCategory}
+                    changeValid={setChangePostingBoard}
+                    onChangeText={onChageSelectBox}
+                  />
+                )}
+              </Typography>
             </Typography>
-            <br />
+            <Typography variant="h3" color="initial">
+              {changePostingBoard && (
+                <Button variant="outlined" color="default">
+                  <Link
+                    component={RouterLink}
+                    to={`/${category}`}
+                    style={{ color: "black" }}
+                    onClick={onClickChangePostingBoard}
+                  >
+                    {postingBoard[0].Maintitle} 돌아가기
+                  </Link>
+                </Button>
+              )}
+            </Typography>
           </Grid>
-          {categoryListInfos?.map((value, index) => (
-            <Grid item xs={12} sm={6} md={4}>
-              <ImgMediaCard data={value} key={value.M_Topics.length * 2} />
-            </Grid>
-          ))}
+          {changePostingBoard ? (
+            <>
+              {subCategoryListInfos?.map((value, index) => (
+                <Grid item xs={12} sm={6} md={4}>
+                  <ImgMediaCard data={value} key={value.M_Topics.length * 2} />
+                </Grid>
+              ))}
+            </>
+          ) : (
+            <>
+              {categoryListInfos?.map((value, index) => (
+                <Grid item xs={12} sm={6} md={4}>
+                  <ImgMediaCard data={value} key={value.M_Topics.length * 2} />
+                </Grid>
+              ))}
+            </>
+          )}
         </>
       ) : (
         <Grid item xs={12} sm={6} md={9}>

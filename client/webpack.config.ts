@@ -53,7 +53,7 @@ const config: Configuration = {
           plugins: [
             "@babel/plugin-proposal-class-properties",
             "@babel/plugin-transform-runtime",
-            // "transform-remove-console",
+            "transform-remove-console",
             // [
             //   "babel-plugin-import",
             //   {
@@ -113,9 +113,9 @@ const config: Configuration = {
 if (isDevelopment && config.plugins) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
   config.plugins.push(new ReactRefreshWebpackPlugin());
-  config.plugins.push(
-    new BundleAnalyzerPlugin({ analyzerMode: "server", openAnalyzer: true })
-  );
+  // config.plugins.push(
+  //   new BundleAnalyzerPlugin({ analyzerMode: "server", openAnalyzer: true })
+  // );
 }
 if (!isDevelopment && config.plugins) {
   config.plugins.push(new HTMLWebpackPlugin({ template: "./index.html" }));

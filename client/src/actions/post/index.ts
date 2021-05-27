@@ -1,6 +1,7 @@
 import {
   DTOCategoryWrite,
   DTOPostingWrite,
+  DTOReWritePosting,
   DTOSubCategoryWrite,
 } from "@typings/DTO";
 import {
@@ -13,6 +14,7 @@ import {
   createActionAxiosGetVerionToAPIPARMA,
 } from "@typings/reduxType/action";
 import axios from "axios";
+import { Mapping_PATHNAME } from "./type";
 import {
   GET_ALL_POSTING,
   GET_DETAIL_SUBTOPICPOSTING,
@@ -27,10 +29,11 @@ import {
   RESET_WRITE_SUBTOPIC,
   GET_SUBTOPIC_LIST,
   RESET_WRITE_POSTING,
+  REWRITE_POSTING,
 } from "./type";
 
-// axios.defaults.baseURL = "https://kimminblog.herokuapp.com/api";
-axios.defaults.baseURL = "http://localhost:3000/api";
+axios.defaults.baseURL = "https://kimminblog.herokuapp.com/api";
+// axios.defaults.baseURL = "http://localhost:3000/api";
 interface BasicqueryString {
   offset: number;
   limit: number;
@@ -181,6 +184,23 @@ export const writeSubTopicInfoAction = createActionAxiosGetVerionToAPIPARMA(
   writeSubTopicInfoAPI
 );
 /////////////////////////
+/////////////////////////
+export const rewritePostingAPI = async ({
+  title,
+  description,
+  postingid,
+}: DTOReWritePosting): Promise<ReturnPostingBoard> => {
+  return await axios.patch(`/category/rewrite/posting/${postingid}`, {
+    title,
+    description,
+  });
+};
+
+export const RewritePostingAction = createActionAxiosGetVerionToAPIPARMA(
+  REWRITE_POSTING,
+  rewritePostingAPI
+);
+/////////////////////////
 export const resetWriteTopicAction = () => ({
   type: RESET_WRITE_TOPIC,
 });
@@ -189,4 +209,8 @@ export const resetWriteSubTopicAction = () => ({
 });
 export const resetWritePostingAction = () => ({
   type: RESET_WRITE_POSTING,
+});
+export const MappingPrevPathNameAction = (data: string) => ({
+  type: Mapping_PATHNAME,
+  payload: data,
 });

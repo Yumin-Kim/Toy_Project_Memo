@@ -7,13 +7,23 @@ interface SelectInputComponent {
   onChangeText: (e: React.ChangeEvent<HTMLInputElement>) => void;
   text: string;
   selectInfo: SelectInfo[];
+  selectCategoryValid?: boolean;
+  changeValid?: any;
 }
 
 const SelectInputComponent: FC<SelectInputComponent> = ({
   onChangeText,
   selectInfo,
   text,
+  selectCategoryValid,
+  changeValid,
 }) => {
+  const onClickMethod = (parama: any) => {
+    if (selectCategoryValid) {
+      console.log(parama.target.value);
+      changeValid(true);
+    }
+  };
   return (
     <>
       <TextField
@@ -23,6 +33,7 @@ const SelectInputComponent: FC<SelectInputComponent> = ({
         value={text}
         name="select title"
         onChange={onChangeText}
+        onClick={onClickMethod}
         required
       >
         {selectInfo.map(option => (

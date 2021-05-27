@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import { IuseParam } from "@typings/route";
 import Typography from "@material-ui/core/Typography";
@@ -8,17 +8,20 @@ import { ROOTSTATE } from "../../reducers/root";
 import {
   getDetailSubTopicInfoAction,
   getDetailTopicInfoAction,
+  MappingPrevPathNameAction,
 } from "@actions/post";
 import Posting from "@components/PostingComponent/Posting";
 
 const DetailInfo = () => {
   const { category, subcategory, id } = useParams<IuseParam>();
+  const location = useLocation()
   const dispatch = useDispatch();
   const { detailCateogoryInfo, detailSubCateogoryInfo } = useSelector(
     (state: ROOTSTATE) => state.post
   );
   useEffect(() => {
-    console.log(category, subcategory, id);
+    console.log(category, subcategory, id, location);
+    dispatch(MappingPrevPathNameAction(location.pathname))
     if (subcategory) {
       dispatch(
         getDetailSubTopicInfoAction.ACTION.REQUEST({

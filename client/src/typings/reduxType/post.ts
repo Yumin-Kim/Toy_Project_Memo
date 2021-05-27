@@ -4,6 +4,8 @@ import {
   TopicListSiderBarInfo,
 } from "@typings/Entity";
 
+type StatusType = null | "idle..." | "sucess" | "Failure" | "Request...";
+
 export interface PostStore {
   sideBarCategoryInfos: TopicListSiderBarInfo[] | null;
   selectSubCategoryListInfos: SubTopicEntity[] | null;
@@ -12,12 +14,10 @@ export interface PostStore {
   subCategoryListInfos: ReturnPostingBoard[] | null;
   detailCateogoryInfo: ReturnPostingBoard | null;
   detailSubCateogoryInfo: ReturnPostingBoard | null;
-  writePosingMessage: null | "idle..." | "sucess" | "Failure" | "Request...";
-  writeCateogoryMessage: null | "idle..." | "sucess" | "Failure" | "Request...";
-  writeSubCateogoryMessage:
-    | null
-    | "idle..."
-    | "sucess"
-    | "Failure"
-    | "Request...";
+  writePosingMessage: StatusType;
+  writeCateogoryMessage: StatusType;
+  writeSubCateogoryMessage: StatusType;
+  rewriteStatusMessage: StatusType;
+  updateDetailInfo: ReturnPostingBoard | null;
+  prevPathname: string | null;
 }

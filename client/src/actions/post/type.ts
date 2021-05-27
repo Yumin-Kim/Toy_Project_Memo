@@ -7,9 +7,11 @@ import {
   getSubTopicListAction,
   getTopicListSiderBarAction,
   getTopicPostingInfoAction,
+  MappingPrevPathNameAction,
   resetWritePostingAction,
   resetWriteSubTopicAction,
   resetWriteTopicAction,
+  RewritePostingAction,
   writePostingInfoAction,
   writeSubTopicInfoAction,
   writeTopicInfoAction,
@@ -73,10 +75,16 @@ export const WRITE_SUBTOPIC = {
   SUCCESS: "SUCCESS_WRITE_SUBTOPIC",
   FAILURE: "FAILURE_WRITE_SUBTOPIC",
 } as const;
+export const REWRITE_POSTING = {
+  REQUEST: "REQUEST_REWRITE_POSTING",
+  SUCCESS: "SUCCESS_REWRITE_POSTING",
+  FAILURE: "FAILURE_REWRITE_POSTING",
+} as const;
 
 export const RESET_WRITE_TOPIC = "RESET_WRITE_TOPIC" as const;
 export const RESET_WRITE_SUBTOPIC = "RESET_WRITE_SUBTOPIC" as const;
 export const RESET_WRITE_POSTING = "RESET_WRITE_POSTING" as const;
+export const Mapping_PATHNAME = "Mapping_PATHNAME" as const;
 
 export type T_GetTopicListSiderBarAction = EntityAction<
   typeof getTopicListSiderBarAction
@@ -104,12 +112,18 @@ export type T_WriteTopicIngoAction = EntityAction<typeof writeTopicInfoAction>;
 export type T_WriteSubTopicIngoAction = EntityAction<
   typeof writeSubTopicInfoAction
 >;
+export type T_ReWriteSubTopicIngoAction = EntityAction<
+  typeof RewritePostingAction
+>;
 export type T_resetWriteTopicAction = ReturnType<typeof resetWriteTopicAction>;
 export type T_resetWriteSubTopicAction = ReturnType<
   typeof resetWriteSubTopicAction
 >;
 export type T_resetWritePostingAction = ReturnType<
   typeof resetWritePostingAction
+>;
+export type T_mappingPrevPathname = ReturnType<
+  typeof MappingPrevPathNameAction
 >;
 
 export type POST_RETURN_ACTIONS =
@@ -124,5 +138,7 @@ export type POST_RETURN_ACTIONS =
   | T_WriteTopicIngoAction
   | T_resetWriteTopicAction
   | T_resetWriteSubTopicAction
+  | T_ReWriteSubTopicIngoAction
   | T_resetWritePostingAction
+  | T_mappingPrevPathname
   | T_WriteSubTopicIngoAction;
