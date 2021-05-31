@@ -8,6 +8,7 @@ import {
   getTopicListSiderBarAction,
   getTopicPostingInfoAction,
   MappingPrevPathNameAction,
+  ResetAllPosingAction,
   resetWritePostingAction,
   resetWriteSubTopicAction,
   resetWriteTopicAction,
@@ -85,6 +86,7 @@ export const RESET_WRITE_TOPIC = "RESET_WRITE_TOPIC" as const;
 export const RESET_WRITE_SUBTOPIC = "RESET_WRITE_SUBTOPIC" as const;
 export const RESET_WRITE_POSTING = "RESET_WRITE_POSTING" as const;
 export const Mapping_PATHNAME = "Mapping_PATHNAME" as const;
+export const RESET_ALL_POSTING = "RESET_ALL_POSTING" as const;
 
 export type T_GetTopicListSiderBarAction = EntityAction<
   typeof getTopicListSiderBarAction
@@ -125,6 +127,7 @@ export type T_resetWritePostingAction = ReturnType<
 export type T_mappingPrevPathname = ReturnType<
   typeof MappingPrevPathNameAction
 >;
+export type T_ResetAllPosting = ReturnType<typeof ResetAllPosingAction>;
 
 export type POST_RETURN_ACTIONS =
   | T_GetAllPostingAction
@@ -140,5 +143,6 @@ export type POST_RETURN_ACTIONS =
   | T_resetWriteSubTopicAction
   | T_ReWriteSubTopicIngoAction
   | T_resetWritePostingAction
+  | T_ResetAllPosting
   | T_mappingPrevPathname
   | T_WriteSubTopicIngoAction;

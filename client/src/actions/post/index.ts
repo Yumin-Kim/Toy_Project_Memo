@@ -14,7 +14,7 @@ import {
   createActionAxiosGetVerionToAPIPARMA,
 } from "@typings/reduxType/action";
 import axios from "axios";
-import { Mapping_PATHNAME } from "./type";
+import { Mapping_PATHNAME, RESET_ALL_POSTING } from "./type";
 import {
   GET_ALL_POSTING,
   GET_DETAIL_SUBTOPICPOSTING,
@@ -32,8 +32,8 @@ import {
   REWRITE_POSTING,
 } from "./type";
 
-axios.defaults.baseURL = "https://kimminblog.herokuapp.com/api";
-// axios.defaults.baseURL = "http://localhost:3000/api";
+// axios.defaults.baseURL = "https://kimminblog.herokuapp.com/api";
+axios.defaults.baseURL = "http://localhost:3000/api";
 interface BasicqueryString {
   offset: number;
   limit: number;
@@ -213,4 +213,8 @@ export const resetWritePostingAction = () => ({
 export const MappingPrevPathNameAction = (data: string) => ({
   type: Mapping_PATHNAME,
   payload: data,
+});
+
+export const ResetAllPosingAction = () => ({
+  type: RESET_ALL_POSTING,
 });

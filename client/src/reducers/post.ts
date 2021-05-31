@@ -2,6 +2,7 @@ import { PostStore } from "@typings/reduxType/post";
 import {
   GET_SUBTOPIC_LIST,
   Mapping_PATHNAME,
+  RESET_ALL_POSTING,
   RESET_WRITE_POSTING,
   REWRITE_POSTING,
 } from "../actions/post/type";
@@ -78,7 +79,17 @@ const postReducer = (
     case GET_ALL_POSTING.FAILURE:
       return state;
     case GET_ALL_POSTING.SUCCESS:
-      return { ...state, mainPostingInfos: [...action.payload] };
+      if (state.mainPostingInfos) {
+        return {
+          ...state,
+          mainPostingInfos: [...state.mainPostingInfos, ...action.payload],
+        };
+      } else {
+        return {
+          ...state,
+          mainPostingInfos: [...action.payload],
+        };
+      }
     case GET_ALL_POSTING.FAILURE:
       return state;
 
@@ -201,6 +212,11 @@ const postReducer = (
       return {
         ...state,
         prevPathname: action.payload,
+      };
+    case RESET_ALL_POSTING:
+      return {
+        ...state,
+        mainPostingInfos: [],
       };
     default:
       return state;
