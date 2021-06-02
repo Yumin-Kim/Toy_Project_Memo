@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { ROOTSTATE } from "reducers/root";
 import { getAllPostingAction, ResetAllPosingAction } from "@actions/post";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { ReturnPostingBoard } from "@typings/Entity";
 
 const Home = () => {
   const { mainPostingInfos } = useSelector((state: ROOTSTATE) => state.post);
@@ -22,7 +21,6 @@ const Home = () => {
     dispatch(getAllPostingAction.ACTION.REQUEST({ offset: 0, limit: 20 }));
   }, []);
   const fetchMoreData = () => {
-    // settOffestCount(offsetCount + 1);
     dispatch(
       getAllPostingAction.ACTION.REQUEST({
         offset: offsetCount,

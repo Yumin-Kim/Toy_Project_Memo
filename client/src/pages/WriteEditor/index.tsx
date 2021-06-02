@@ -20,6 +20,7 @@ import { useInput } from "@hooks/useInput";
 import { useCallback } from "react";
 import { writePostingInfoAction } from "../../actions/post/index";
 import { Redirect } from "react-router-dom";
+import gfm from "remark-gfm";
 
 const WriteEditor = () => {
   const mdEditor = useRef(null);
@@ -192,7 +193,12 @@ const WriteEditor = () => {
               height: "500px",
             }}
             onChange={handleEditorChange}
-            renderHTML={text => <ReactMarkdown children={text} />}
+            renderHTML={text => (
+              <ReactMarkdown
+                children={text}
+                remarkPlugins={[[gfm, { singleTilde: false }]]}
+              />
+            )}
           />
         </Grid>
       ) : (

@@ -15,6 +15,7 @@ import { ReducePostingBoard, ReturnPostingBoard } from "@typings/Entity";
 import SelectInputComponent from "@components/UtilComponent/SelectInputComponent";
 import { useCallback } from "react";
 import { Button } from "@material-ui/core";
+import InfiniteScrollCardViewComonent from "@components/CardCharView/InfiniteScrollCardViewComonent";
 
 const Category = () => {
   const { category, subcategory } = useParams<IuseParam>();
@@ -23,6 +24,8 @@ const Category = () => {
   const [selectSubCategory, setSelectSubCategory] =
     useState<SelectInfo[] | null>(null);
   const [changePostingBoard, setChangePostingBoard] = useState(false);
+  const [selectValue, setSelectValue] = useState("");
+  const [offsetConut, setOffsetCount] = useState(20);
   const { categoryListInfos, subCategoryListInfos, sideBarCategoryInfos } =
     useSelector((state: ROOTSTATE) => state.post);
   const dispatch = useDispatch();
@@ -31,9 +34,6 @@ const Category = () => {
       value => value.pathname === "/" + category
     );
     setChangePostingBoard(false);
-
-    // setPosingBoard(null);
-    // setSelectSubCategory(null);
     if (data) {
       if (category) {
         if (subcategory) {
@@ -47,7 +47,7 @@ const Category = () => {
           dispatch(
             getTopicPostingInfoAction.ACTION.REQUEST({
               offset: 0,
-              limit: 20,
+              limit: offsetConut,
               topic: data.title,
             })
           );
@@ -91,10 +91,8 @@ const Category = () => {
         },
         [] as SelectInfo[]
       );
-      console.log("HashSubTitle", selectInfos);
       if (parseData) {
         setPosingBoard(parseData);
-        // setChangePostingBoard(false);
       }
       if (selectInfos.length !== 0) {
         setSelectSubCategory(selectInfos);
@@ -110,7 +108,6 @@ const Category = () => {
 
   const onChageSelectBox = useCallback(
     (e: React.ChangeEvent) => {
-      console.log(e);
       if (sideBarCategoryInfos) {
         let data;
         if (postingBoard) {
@@ -120,6 +117,7 @@ const Category = () => {
         }
         if (data) {
           setChangePostingBoard(true);
+          setSelectValue((e.target as any).value);
           dispatch(
             getSubTopicInfoAction.ACTION.REQUEST({
               subTopic: (e.target as any).value,
@@ -142,6 +140,22 @@ const Category = () => {
     }
     setChangePostingBoard(false);
   }, [selectSubCategory]);
+
+  const onNextLoadScrollFunc = useCallback(() => {
+    const matchtoPathName = sideBarCategoryInfos?.find(
+      value => value.pathname === "/" + category
+    );
+    if (matchtoPathName) {
+      dispatch(
+        getTopicPostingInfoAction.ACTION.REQUEST({
+          limit: offsetConut,
+          offset: offsetConut + 20,
+          topic: matchtoPathName.title,
+        })
+      );
+      setOffsetCount(offsetConut + 20);
+    }
+  }, [category]);
 
   return (
     <>
@@ -186,11 +200,17 @@ const Category = () => {
             </>
           ) : (
             <>
-              {categoryListInfos?.map((value, index) => (
+              {/* {categoryListInfos?.map((value, index) => (
                 <Grid item xs={12} sm={6} md={4}>
                   <ImgMediaCard data={value} key={value.M_Topics.length * 2} />
                 </Grid>
-              ))}
+              ))} */}
+              {categoryListInfos && categoryListInfos.length !== 0 && (
+                <InfiniteScrollCardViewComonent
+                  scrollLoadData={categoryListInfos}
+                  onNextDispatchFunc={onNextLoadScrollFunc}
+                />
+              )}
             </>
           )}
         </>

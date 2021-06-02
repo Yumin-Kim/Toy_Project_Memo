@@ -13,7 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { Redirect } from "react-router-dom";
 import { RewritePostingAction } from "@actions/post";
-
+import gfm from "remark-gfm";
 const ReWriteEditor = () => {
   const [value, setValue] = useState("");
   const [titleSValue, setTitleValue] = useState("");
@@ -115,7 +115,12 @@ const ReWriteEditor = () => {
                 height: "500px",
               }}
               onChange={handleEditorChange}
-              renderHTML={text => <ReactMarkdown children={text} />}
+              renderHTML={text => (
+                <ReactMarkdown
+                  children={text}
+                  remarkPlugins={[[gfm, { singleTilde: false }]]}
+                />
+              )}
             />
           </Grid>
         )}

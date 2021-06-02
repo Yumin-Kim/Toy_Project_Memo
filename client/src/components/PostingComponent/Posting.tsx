@@ -3,6 +3,7 @@ import Button from "@material-ui/core/Button";
 import ReactMarkdown from "react-markdown";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@material-ui/core";
+import gfm from "remark-gfm";
 
 interface PostingProps {
   postingData: string;
@@ -23,7 +24,10 @@ const Posting: FC<PostingProps> = ({ postingData }) => {
       >
         삭제
       </Button>
-      <ReactMarkdown children={postingData} />
+      <ReactMarkdown
+        children={postingData}
+        remarkPlugins={[[gfm, { singleTilde: false }]]}
+      />
     </>
   );
 };
