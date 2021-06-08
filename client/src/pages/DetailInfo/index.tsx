@@ -10,6 +10,7 @@ import {
   getDetailTopicInfoAction,
   MappingPrevPathNameAction,
 } from "@actions/post";
+import "react-markdown-editor-lite/lib/index.css";
 import Posting from "@components/PostingComponent/Posting";
 
 const DetailInfo = () => {

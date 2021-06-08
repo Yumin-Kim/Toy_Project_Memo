@@ -24,10 +24,7 @@ const Posting: FC<PostingProps> = ({ postingData }) => {
       >
         삭제
       </Button>
-      <ReactMarkdown
-        children={postingData}
-        remarkPlugins={[[gfm, { singleTilde: false }]]}
-      />
+      <ReactMarkdown children={postingData} remarkPlugins={[[gfm]]} />
     </>
   );
 };
