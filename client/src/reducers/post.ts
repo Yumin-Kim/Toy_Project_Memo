@@ -20,6 +20,7 @@ import {
   RESET_WRITE_TOPIC,
   RESET_WRITE_SUBTOPIC,
 } from "@actions/post/type";
+import { TopicListSiderBarInfo } from "@typings/Entity";
 
 const postInitialState: PostStore = {
   sideBarCategoryInfos: null,
@@ -59,11 +60,34 @@ const postReducer = (
       };
     case GET_TOPICLIST_SIDEBAR.REQUEST:
       return state;
-    case GET_TOPICLIST_SIDEBAR.SUCCESS:
+    case GET_TOPICLIST_SIDEBAR.SUCCESS: {
+      const englishCatgory: TopicListSiderBarInfo[] = [];
+      const regExpActionPayload = action.payload
+        .reduce((prev, cur, index) => {
+          prev.push({ ...cur });
+          return prev;
+        }, [] as TopicListSiderBarInfo[])
+        .filter(element => {
+          if (element.title) {
+            const data = element.title.match(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]*/i);
+            if (data) {
+              if (data[0] !== "") {
+                return element;
+              } else {
+                englishCatgory.push({ ...element });
+              }
+            }
+          }
+        });
+
       return {
         ...state,
-        sideBarCategoryInfos: [...action.payload],
+        sideBarCategoryInfos: [
+          ...regExpActionPayload.sort(),
+          ...englishCatgory.sort(),
+        ],
       };
+    }
     case GET_SUBTOPIC_LIST.REQUEST:
       return state;
     case GET_SUBTOPIC_LIST.SUCCESS:

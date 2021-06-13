@@ -21,7 +21,6 @@ const DetailInfo = () => {
     (state: ROOTSTATE) => state.post
   );
   useEffect(() => {
-    console.log(category, subcategory, id, location);
     dispatch(MappingPrevPathNameAction(location.pathname))
     if (subcategory) {
       dispatch(
@@ -39,9 +38,7 @@ const DetailInfo = () => {
         })
       );
     }
-    //category subcategory , id를 통해서 조회
   }, []);
-
   return (
     <>
       <Grid
@@ -55,7 +52,6 @@ const DetailInfo = () => {
           padding: "10px",
         }}
       >
-        {subcategory ? (
           <>
             {detailSubCateogoryInfo && (
               <>
@@ -77,28 +73,24 @@ const DetailInfo = () => {
               </>
             )}{" "}
           </>
-        ) : (
+        {detailCateogoryInfo && <>
           <>
-            {detailCateogoryInfo && (
-              <>
-                <Typography variant="h3" color="initial">
-                  {detailCateogoryInfo?.title}
-                  </Typography>
-                  <br />
-                <Typography variant="h5" color="initial">
-                  포스팅 제목 : {detailCateogoryInfo.title}
-                </Typography>
-                <br />
-                <Typography variant="inherit" color="initial">
-                  포스팅 작성일 : {detailCateogoryInfo.createdAt}
-                </Typography>
-                <br />
-                <br />
-                <Posting postingData={detailCateogoryInfo?.description} />
-              </>
-            )}
+            <Typography variant="h3" color="initial">
+              {detailCateogoryInfo?.title}
+            </Typography>
+            <br />
+            <Typography variant="h5" color="initial">
+              포스팅 제목 : {detailCateogoryInfo.title}
+            </Typography>
+            <br />
+            <Typography variant="inherit" color="initial">
+              포스팅 작성일 : {detailCateogoryInfo.createdAt}
+            </Typography>
+            <br />
+            <br />
+            <Posting postingData={detailCateogoryInfo?.description} />
           </>
-        )}
+        </>}
       </Grid>
     </>
   );

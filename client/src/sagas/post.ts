@@ -189,6 +189,8 @@ function* detailTopicPostingSagaFunc(action: T_GetDetailTopicPostingAction) {
   try {
     if (action.type === "REQUEST_GET_DETAIL_TOPICPOSTING") {
       const { data } = yield call(getDetailTopicInfoAction.API, action.payload);
+      console.log("REQUEST_GET_DETAIL_TOPICPOSTING", data);
+
       yield put(getDetailTopicInfoAction.ACTION.SUCCESS(data));
     }
   } catch (error) {
@@ -197,7 +199,7 @@ function* detailTopicPostingSagaFunc(action: T_GetDetailTopicPostingAction) {
 }
 
 function* watchDetailTopicPosting() {
-  yield takeLatest(
+  yield takeEvery(
     getDetailTopicInfoAction.ACTION.REQUEST,
     detailTopicPostingSagaFunc
   );
@@ -211,6 +213,8 @@ function* detailSubTopicPostingSagaFunc(
         getDetailSubTopicInfoAction.API,
         action.payload
       );
+      console.log(data);
+
       yield put(getDetailSubTopicInfoAction.ACTION.SUCCESS(data));
     }
   } catch (error) {
@@ -219,7 +223,7 @@ function* detailSubTopicPostingSagaFunc(
 }
 
 function* watchDetailSubTopicPosting() {
-  yield takeLatest(
+  yield takeEvery(
     getDetailSubTopicInfoAction.ACTION.REQUEST,
     detailSubTopicPostingSagaFunc
   );
