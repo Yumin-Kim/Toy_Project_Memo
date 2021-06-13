@@ -1,0 +1,3 @@
+[submodule "kimminblog"]
+	path = kimminblog
+	url = https://git.heroku.com/kimminblog.git
